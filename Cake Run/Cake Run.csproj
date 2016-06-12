@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Character.cs" />
-    <Compile Include="Classes\Platform.cs" />
+    <Compile Include="Cloud.cs" />
     <Compile Include="Screens\GameScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -78,6 +81,7 @@
     <EmbeddedResource Include="Screens\InstructionScreen.resx">
       <DependentUpon>InstructionScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,6 +97,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\BKGInstructionScreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\InstructionScreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sky.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blueCloud.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\greenCloud.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playerCloud.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redCloud.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellowCloud.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

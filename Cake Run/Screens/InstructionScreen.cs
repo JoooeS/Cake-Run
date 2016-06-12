@@ -1,4 +1,14 @@
-﻿using System;
+﻿///
+/// Program Name: Race for the Cake
+/// Programmer: Joe Soukphachanh
+/// Program Description: Jump from one cloud-created object to the next. Each cloud has an assigned colour and the players have to press the correct button
+/// to get to the next cloud. If the player presses the wrong cloud, they will be stunned temporrary and thus be unable to press any other buttons until the
+/// stun penalty has been released
+/// 
+/// Date: Spring 2016
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,12 +30,6 @@ namespace Cake_Run
         public InstructionScreen()
         {
             InitializeComponent();
-
-            labelTitleDescription.BackColor = Color.FromArgb(240, 255, 0, 255);
-            labelTitleInstruction.BackColor = Color.FromArgb(240, 0, 255, 0);
-            labelFiller.BackColor = Color.FromArgb(240, 0, 80, 80);
-            labelDescDetails.BackColor = labelInstrDetails.BackColor = Color.FromArgb(240, 0, 0, 0);
-            labelBlack.BackColor = Color.FromArgb(0, 0, 0, 0);
 
             GraphicsPath circlePath = new GraphicsPath();
             circlePath.AddEllipse(0, 0, 80, 80);
@@ -61,18 +65,6 @@ namespace Cake_Run
         {
             if (playersCurrentlyReady == PLAYERS_NEEDED_TO_BE_READY)
             {
-                labelBlack.Visible = true;
-                labelBlack.BackColor = Color.FromArgb(0, 0, 0, 0);
-                labelBlack.BringToFront();
-                Refresh();
-
-                for (int i = 0; i < 256; i+= 8)
-                {
-                    labelBlack.BackColor = Color.FromArgb(i, 0, 0, 0);
-                    labelBlack.Refresh();
-                    Thread.Sleep(10);
-                }
-
 
                 GameScreen gs = new GameScreen();
                 this.Controls.Add(gs);

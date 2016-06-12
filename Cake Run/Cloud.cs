@@ -7,28 +7,28 @@ using System.Drawing;
 
 namespace Cake_Run
 {
-    class Character
+    class Cloud
     {
-        public int xLoc, yLoc, xSize, ySize, cloudsCleared;
-        public Image playerCloud;
+        public int colour, xLoc, yLoc, xSize, ySize;
+        public Image cloudColour;
 
         /// <summary>
-        /// Constructor Method for Character cloud
+        /// Constructor Method for Clouds
         /// </summary>
+        /// <param name="_colour">R,G,B, or Y</param>
         /// <param name="_xLoc">X Location</param>
         /// <param name="_yLoc">Y Location</param>
         /// <param name="_xSize">X Size </param>
         /// <param name="_ySize">Y Size</param>
-        /// /// <param name="_cloudsCleared">The number of clouds cleared</param>
-        /// <param name="_playerCloud">Iamge file with corresponding picture, cute cloud</param>
-        public Character (int _xLoc, int _yLoc, int _xSize, int _ySize, int _cloudsCleared, Image _playerCloud)
+        /// <param name="_cloudColour">Iamge file with corresponding colour</param>
+        public Cloud (int _colour, int _xLoc, int _yLoc, int _xSize, int _ySize, Image _cloudColour)
         {
+            colour = _colour;
             xLoc = _xLoc;
             yLoc = _yLoc;
             xSize = _xSize;
             ySize = _ySize;
-            cloudsCleared = _cloudsCleared;
-            playerCloud = _playerCloud;
+            cloudColour = _cloudColour;
         }
     }
 }

@@ -63,9 +63,69 @@ namespace Cake_Run.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BKGInstructionScreen {
+        internal static System.Drawing.Bitmap blueCloud {
             get {
-                object obj = ResourceManager.GetObject("BKGInstructionScreen", resourceCulture);
+                object obj = ResourceManager.GetObject("blueCloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap greenCloud {
+            get {
+                object obj = ResourceManager.GetObject("greenCloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap InstructionScreen {
+            get {
+                object obj = ResourceManager.GetObject("InstructionScreen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap playerCloud {
+            get {
+                object obj = ResourceManager.GetObject("playerCloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap redCloud {
+            get {
+                object obj = ResourceManager.GetObject("redCloud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Sky {
+            get {
+                object obj = ResourceManager.GetObject("Sky", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap yellowCloud {
+            get {
+                object obj = ResourceManager.GetObject("yellowCloud", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
