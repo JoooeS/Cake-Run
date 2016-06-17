@@ -36,6 +36,10 @@
     <ApplicationManifest>Misc\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Arcade, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Arcade.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -102,21 +106,6 @@
     <None Include="Resources\Sky.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\blueCloud.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\greenCloud.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\playerCloud.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\redCloud.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\yellowCloud.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\bensound-funnysong.mp3" />
   </ItemGroup>
   <ItemGroup>
@@ -129,9 +118,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\blackCloud.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\blueCloud.png" />
@@ -150,6 +136,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\playerCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\win.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

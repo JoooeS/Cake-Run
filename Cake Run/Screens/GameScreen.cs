@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using WMPLib;
+using Arcade;
 
 namespace Cake_Run
 {
@@ -22,10 +23,15 @@ namespace Cake_Run
         int player1PictureLocation = -750;
         int player2PictureLocation = -750;
         int animateTime = 4;
+        int endOfGameTime;
+        int winX = 200;
+        int loseX = 200;
+        
 
         Random numberGen = new Random();
 
         bool bDown, nDown, mDown, spaceDown, zDown, xDown, cDown, vDown;
+        bool endOfGame = false;
 
         Image[] cloudColours = new Image[4];
         List<int> colourPattern = new List<int>();
@@ -43,6 +49,7 @@ namespace Cake_Run
         WindowsMediaPlayer jumpPlayer4 = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer5 = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer6 = new WindowsMediaPlayer();
+        WindowsMediaPlayer yayplayer = new WindowsMediaPlayer();
 
         Boolean jumpPlayerPlaying = false;
         Boolean jumpPlayerPlaying2 = false;
@@ -57,6 +64,7 @@ namespace Cake_Run
         public GameScreen()
         {
             InitializeComponent();
+            //ArcadeUtilities.InUseCheck();
         }
 
         private void GameScreen_Load(object sender, EventArgs e)
@@ -77,6 +85,8 @@ namespace Cake_Run
             jumpPlayer5.controls.stop();
             jumpPlayer6.URL = "Ya.mp3";
             jumpPlayer6.controls.stop();
+            yayplayer.URL = "yay.mp3";
+            yayplayer.controls.stop();
             songPlayer.controls.play();
             #endregion
 
@@ -89,7 +99,7 @@ namespace Cake_Run
             //Create colour pattern which will be the same for both characters for fairness
             for (int i = 0; i < numberOfClouds; i++)
             {
-                int x = numberGen.Next(0, 4);
+                int x = numberGen.Next(0, 1);
                 colourPattern.Add(x);
             }
 
@@ -373,11 +383,50 @@ namespace Cake_Run
             }
             #endregion
 
+            #region Win check
+            if (player1.cloudsCleared == numberOfClouds || player2.cloudsCleared == numberOfClouds)
+            {
+                //gameTick.Enabled = false;
+                // for loop that runs 24 times adjusting x and calling refresh
+
+                
+                if (endOfGameTime == 0 & endOfGame == false)
+                {
+                    yayplayer.controls.play();
+                    endOfGame = true;
+                    endOfGameTime = 24;
+                }
+                else if (endOfGameTime > 11)
+                {
+                    endOfGameTime--;
+                }
+                else if (endOfGameTime == 1)
+                {
+                    gameTick.Enabled = false;
+                    gameTick.Stop();
+                    return;
+                }
+                else if (endOfGameTime > 0 & player1.cloudsCleared == numberOfClouds)
+                {
+                    winX -= 3;
+                    loseX += 3;
+                }
+                else if (endOfGameTime > 0 & player2.cloudsCleared == numberOfClouds)
+                {
+                    winX += 3;
+                    loseX -= 3;
+                }
+            }
+            
+
+
+            #endregion
             Refresh();
         }
 
         private void GameScreen_KeyDown(object sender, KeyEventArgs e)
         {
+            //ArcadeUtilities.InUseReset();
             // PLAYER 1 LEFT
             switch (e.KeyCode)
             {
@@ -455,7 +504,7 @@ namespace Cake_Run
         {
             // Background images
             e.Graphics.DrawImage(Properties.Resources.Sky, 0, player1PictureLocation, 398, 1500);
-            e.Graphics.DrawImage(Properties.Resources.Sky, 398, player2PictureLocation, 398, 1500);
+            e.Graphics.DrawImage(Properties.Resources.Sky, 398, player2PictureLocation, 402, 1500);
 
             //MIDDLE LINE
             e.Graphics.DrawLine(new Pen(Color.LightBlue, 12), 394, 0, 394, 750);
@@ -487,6 +536,13 @@ namespace Cake_Run
             // Drawing the actual cloud of each player
             e.Graphics.DrawImage(player1.playerCloud, player1.xLoc, player1.yLoc, player1.xSize, player1.ySize);
             e.Graphics.DrawImage(player2.playerCloud, player2.xLoc, player2.yLoc, player2.xSize, player2.ySize);
+
+            // Win
+            if (endOfGame)
+            {
+                e.Graphics.DrawImage(Properties.Resources.win, winX, 150, 400, 200);
+                e.Graphics.DrawImage(Properties.Resources.lose, loseX, 350, 400, 200);
+            }
         }
     }
 }
