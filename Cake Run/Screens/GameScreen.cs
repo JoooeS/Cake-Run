@@ -8,28 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using WMPLib;
 
 namespace Cake_Run
 {
     public partial class GameScreen : UserControl
     {
         #region Variables
-        int LINE_RATIO = 5; //Add 5 everytime they go up a cloud and the progression circle needs to move CONSTANT
-
-        int CLOUD_Y_SIZE = 30; //Accounts for height CONSTANT
-        int CLOUD_X_SIZE = 40; //TESTING STILL
-        int CLOUD_Y_SPACING = 5; //ACounts for the height spacing between clouds
-        int CLOUD_X_SPACING = 40; //TESTING STILL
+        int LINE_RATIO = 3;
+        int numberOfClouds = 67;
+        int CLOUD_Y_SIZE = 30;
+        int CLOUD_X_SIZE = 40;
         int player1PictureLocation = -750;
         int player2PictureLocation = -750;
-
-        //player1 button control keys 
-        Boolean bDown, nDown, mDown, spaceDown;
-
-        //player2 button control keys 
-        Boolean cDown, vDown, xDown, zDown; //Y<R<G<Y
+        int animateTime = 4;
 
         Random numberGen = new Random();
+
+        bool bDown, nDown, mDown, spaceDown, zDown, xDown, cDown, vDown;
 
         Image[] cloudColours = new Image[4];
         List<int> colourPattern = new List<int>();
@@ -38,6 +34,24 @@ namespace Cake_Run
 
         Character player1;
         Character player2;
+
+        WindowsMediaPlayer songPlayer = new WindowsMediaPlayer();
+
+        WindowsMediaPlayer jumpPlayer = new WindowsMediaPlayer();
+        WindowsMediaPlayer jumpPlayer2 = new WindowsMediaPlayer();
+        WindowsMediaPlayer jumpPlayer3 = new WindowsMediaPlayer();
+        WindowsMediaPlayer jumpPlayer4 = new WindowsMediaPlayer();
+        WindowsMediaPlayer jumpPlayer5 = new WindowsMediaPlayer();
+        WindowsMediaPlayer jumpPlayer6 = new WindowsMediaPlayer();
+
+        Boolean jumpPlayerPlaying = false;
+        Boolean jumpPlayerPlaying2 = false;
+        Boolean jumpPlayerPlaying3 = false;
+        Boolean jumpPlayerPlaying4 = false;
+        Boolean jumpPlayerPlaying5 = false;
+        Boolean jumpPlayerPlaying6 = false;
+
+
         #endregion
 
         public GameScreen()
@@ -47,185 +61,378 @@ namespace Cake_Run
 
         private void GameScreen_Load(object sender, EventArgs e)
         {
-            //TODO Count down
+            this.Focus();
 
+            #region MP3 Players *** MAY CHANGE TO WAV
+            songPlayer.URL = "bensound-cute.mp3";
+            jumpPlayer.URL = "Ya.mp3";
+            jumpPlayer.controls.stop();
+            jumpPlayer2.URL = "Ya.mp3";
+            jumpPlayer2.controls.stop();
+            jumpPlayer3.URL = "Ya.mp3";
+            jumpPlayer3.controls.stop();
+            jumpPlayer4.URL = "Ya.mp3";
+            jumpPlayer4.controls.stop();
+            jumpPlayer5.URL = "Ya.mp3";
+            jumpPlayer5.controls.stop();
+            jumpPlayer6.URL = "Ya.mp3";
+            jumpPlayer6.controls.stop();
+            songPlayer.controls.play();
+            #endregion
 
-            //ff
+            // Clouds Array
             cloudColours[0] = Properties.Resources.redCloud;
             cloudColours[1] = Properties.Resources.greenCloud;
             cloudColours[2] = Properties.Resources.yellowCloud;
             cloudColours[3] = Properties.Resources.blueCloud;
 
             //Create colour pattern which will be the same for both characters for fairness
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < numberOfClouds; i++)
             {
                 int x = numberGen.Next(0, 4);
-
                 colourPattern.Add(x);
             }
 
-            this.Focus();
-
             //Player 1 clouds
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < numberOfClouds; i++)
             {
                 Cloud c = new Cloud(colourPattern[i], numberGen.Next(10, 250), 550 - (40 * i), CLOUD_X_SIZE, CLOUD_Y_SIZE, cloudColours[colourPattern[i]]);
                 p1Clouds.Add(c);
             }
 
             //Player 2 clouds
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < numberOfClouds; i++)
             {
                 Cloud c = new Cloud(colourPattern[i], numberGen.Next(510, 750), 550 - (40 * i), CLOUD_X_SIZE, CLOUD_Y_SIZE, cloudColours[colourPattern[i]]);
                 p2Clouds.Add(c);
             }
 
-            player1 = new Character(p1Clouds[0].xLoc, p1Clouds[0].yLoc + 50, 40, 30, 0, Properties.Resources.playerCloud);
-            player2 = new Character(p2Clouds[0].xLoc, p2Clouds[0].yLoc + 50, 40, 30, 0, Properties.Resources.playerCloud);
-
+            // Creating player clouds
+            player1 = new Character(numberGen.Next(10, 250), p1Clouds[0].yLoc + 50, 40, 30, 0, 0, 0, 0, Properties.Resources.playerCloud);
+            player2 = new Character(numberGen.Next(510, 750), p2Clouds[0].yLoc + 50, 40, 30, 0, 0, 0, 0, Properties.Resources.playerCloud);
 
             gameTick.Enabled = true;
         }
 
-        private void GameScreen_Paint(object sender, PaintEventArgs e)
-        {
-            // Background images
-                // PLAYER ONE - LEFT
-            
-                //PLAYER TWO - RIGHT
-            e.Graphics.DrawImage(Properties.Resources.Sky, 398, player2PictureLocation);
-
-                //MIDDLE LINE
-            e.Graphics.DrawLine(new Pen(Color.LightBlue, 12), 394, 0, 394, 750);
-                //MIDDLE RECTANGLE
-            e.Graphics.DrawRectangle(new Pen(Color.LightBlue, 8), 300, 260, 200, 280);
-            e.Graphics.FillRectangle(new SolidBrush(Color.LightYellow), 304, 264, 192, 272);
-
-                // PROGRESS LINE AND BAR
-            e.Graphics.DrawLine(new Pen(Color.Black, 4), 348, 312, 348, 512);
-            e.Graphics.DrawLine(new Pen(Color.Black, 4), 448, 312, 448, 512);
-            e.Graphics.DrawString("GOAL", new Font("Verdana", 24, FontStyle.Regular), new SolidBrush(Color.DarkOrange), 350, 270);
-
-                // TWO CIRCLES FOR PLAYER ONE AND PLAYER TWO
-            e.Graphics.FillEllipse(new SolidBrush(Color.LightBlue), 337, 500 - (player1.cloudsCleared * LINE_RATIO), 22, 22); // Player Left
-            e.Graphics.FillEllipse(new SolidBrush(Color.LightGreen), 437, 500 - (player2.cloudsCleared * LINE_RATIO), 22, 22); /// Player Right
-
-                //DRAW ALL CLOUDS FOR PLAYER ONE
-            foreach (var c in p1Clouds)
-            {
-                e.Graphics.DrawImage(c.cloudColour, c.xLoc, c.yLoc + (50 * player1.cloudsCleared), c.xSize, c.ySize);
-            }
-
-                //DRAW ALL CLOUDS FOR PLAYER TWO
-            foreach (var c in p2Clouds)
-            {
-                e.Graphics.DrawImage(c.cloudColour, c.xLoc, c.yLoc + (50 * player2.cloudsCleared), c.xSize, c.ySize);
-            }
-
-            //DRAWING PLAYER ONE AND PLAYER TWO RESPECTIVELY:
-            e.Graphics.DrawImage(player1.playerCloud, player1.xLoc, player1.yLoc, player1.xSize, player1.ySize);
-            e.Graphics.DrawImage(player2.playerCloud, player2.xLoc, player2.yLoc, player2.xSize, player2.ySize);
-        }
-
         private void gameTick_Tick(object sender, EventArgs e)
         {
-            if (player1.cloudsCleared <= 25)
+            #region Player 1 check
+            if (player1.cloudsCleared < numberOfClouds)
             {
-                player1PictureLocation = -750 + (player1.cloudsCleared * 30);
+                if (player1.errorCount == 0 & player1.animate == 0)
+                {   // R = 0        G = 1            Y = 2           B = 3
+                    if (zDown == true & p1Clouds[0].colour == 1)
+                    {
+                        player1.animate = animateTime;
+                        player1.xDifference = player1.xLoc - p1Clouds[0].xLoc;
+                    }
+                    else if (zDown == true & p1Clouds[0].colour != 1)
+                    {
+                        player1.playerCloud = Properties.Resources.blackCloud;
+                        player1.errorCount = 10;
+                    }
+
+                    if (xDown == true & p1Clouds[0].colour == 0)
+                    {
+                        player1.animate = animateTime;
+                        player1.xDifference = player1.xLoc - p1Clouds[0].xLoc;
+                    }
+                    else if (xDown == true & p1Clouds[0].colour != 0)
+                    {
+                        player1.playerCloud = Properties.Resources.blackCloud;
+                        player1.errorCount = 10;
+                    }
+
+                    if (cDown == true & p1Clouds[0].colour == 2)
+                    {
+                        player1.animate = animateTime;
+                        player1.xDifference = player1.xLoc - p1Clouds[0].xLoc;
+                    }
+                    else if (cDown == true & p1Clouds[0].colour != 2)
+                    {
+                        player1.playerCloud = Properties.Resources.blackCloud;
+                        player1.errorCount = 10;
+                    }
+
+                    if (vDown == true & p1Clouds[0].colour == 3)
+                    {
+                        player1.animate = animateTime;
+                        player1.xDifference = player1.xLoc - p1Clouds[0].xLoc;
+                    }
+                    else if (vDown == true & p1Clouds[0].colour != 3)
+                    {
+                        player1.playerCloud = Properties.Resources.blackCloud;
+                        player1.errorCount = 10;
+                    }
+                }
             }
-            else if (player1.cloudsCleared > 25)
+            #endregion
+
+            #region Player 2 check
+            if (player2.cloudsCleared < numberOfClouds)
             {
-                player1PictureLocation = 0;
+                if (player2.errorCount == 0 & player2.animate == 0)
+                {   // R = 0        G = 1            Y = 2           B = 3
+                    if (bDown == true & p2Clouds[0].colour == 3)
+                    {
+                        player2.animate = animateTime;
+                        player2.xDifference = player2.xLoc - p2Clouds[0].xLoc;
+
+                    }
+                    else if (bDown == true & p2Clouds[0].colour != 3)
+                    {
+                        player2.playerCloud = Properties.Resources.blackCloud;
+                        player2.errorCount = 10;
+                    }
+
+                    if (nDown == true & p2Clouds[0].colour == 2)
+                    {
+                        player2.animate = animateTime;
+                        player2.xDifference = player2.xLoc - p2Clouds[0].xLoc;
+                    }
+                    else if (nDown == true & p2Clouds[0].colour != 2)
+                    {
+                        player2.playerCloud = Properties.Resources.blackCloud;
+                        player2.errorCount = 10;
+                    }
+
+                    if (mDown == true & p2Clouds[0].colour == 0)
+                    {
+                        player2.animate = animateTime;
+                        player2.xDifference = player2.xLoc - p2Clouds[0].xLoc;
+                    }
+                    else if (mDown == true & p2Clouds[0].colour != 0)
+                    {
+                        player2.playerCloud = Properties.Resources.blackCloud;
+                        player2.errorCount = 10;
+                    }
+
+                    if (spaceDown == true & p2Clouds[0].colour == 1)
+                    {
+                        player2.animate = animateTime;
+                        player2.xDifference = player2.xLoc - p2Clouds[0].xLoc;
+                    }
+                    else if (spaceDown == true & p2Clouds[0].colour != 1)
+                    {
+                        player2.playerCloud = Properties.Resources.blackCloud;
+                        player2.errorCount = 10;
+                    }
+                }
+            }
+            #endregion
+
+            #region Animate check
+            // Player 1 (left)
+            if (player1.animate == 4)
+            {
+                if (!jumpPlayerPlaying)
+                {
+                    jumpPlayer.controls.play();
+                    jumpPlayerPlaying = true;
+                    jumpPlayerPlaying2 = false;
+                }
+                else if (!jumpPlayerPlaying2)
+                {
+                    jumpPlayer2.controls.play();
+                    jumpPlayerPlaying2 = true;
+                    jumpPlayerPlaying3 = false;
+                }
+                else if (!jumpPlayerPlaying3)
+                {
+                    jumpPlayer3.controls.play();
+                    jumpPlayerPlaying3 = true;
+                    jumpPlayerPlaying = false;
+                }
+            }
+            if (player1.animate > 0)
+            {
+                player1PictureLocation += 3;
+                player1.yLoc -= 2;
+
+                if (player1.xDifference < 0)
+                {
+                    player1.xLoc += (player1.xDifference * -1) / 3;
+                }
+                else if (player1.xDifference > 0)
+                {
+                    player1.xLoc -= player1.xDifference / 3;
+                }
+                else if (player1.xDifference == 0)
+                {
+                    player1.xLoc = p1Clouds[0].xLoc;
+                }
+
+                foreach (var c in p1Clouds)
+                {
+                    c.yLoc += 11;
+                }
+
+                player1.animate--;
+            }
+            if (player1.animate == 1)
+            {
+                p1Clouds.RemoveAt(0);
+                player1.cloudsCleared++;
+                player1.animate--;
             }
 
-            if (player2.cloudsCleared <= 25)
+            // Player 2 (right)
+            if (player2.animate == 4)
             {
-                player2PictureLocation = -750 + (player2.cloudsCleared * 30);
+                if (!jumpPlayerPlaying4)
+                {
+                    jumpPlayer4.controls.play();
+                    jumpPlayerPlaying4 = true;
+                    jumpPlayerPlaying5 = false;
+                }
+                else if (!jumpPlayerPlaying5)
+                {
+                    jumpPlayer5.controls.play();
+                    jumpPlayerPlaying5 = true;
+                    jumpPlayerPlaying6 = false;
+                }
+                else if (!jumpPlayerPlaying6)
+                {
+                    jumpPlayer6.controls.play();
+                    jumpPlayerPlaying6 = true;
+                    jumpPlayerPlaying4 = false;
+                }
             }
-            else if (player2.cloudsCleared > 25)
+            if (player2.animate == 4)
             {
-                player2PictureLocation = 0;
+                jumpPlayer2.controls.play();
             }
+            if (player2.animate > 0)
+            {
+                player2PictureLocation += 3;
+                player2.yLoc -= 2;
+                
+                if (player2.xDifference < 0)
+                {
+                    player2.xLoc += (player2.xDifference * -1) / 3;
+                }
+                else if (player2.xDifference > 0)
+                {
+                    player2.xLoc -= player2.xDifference / 3;
+                }
+                else if (player2.xDifference == 0)
+                {
+                    player2.xLoc = p2Clouds[0].xLoc;
+                }
+
+                foreach (var c in p2Clouds)
+                {
+                    c.yLoc += 11;
+                }
+
+                player2.animate--;
+            }
+            if (player2.animate == 1)
+            {
+                p2Clouds.RemoveAt(0);
+                player2.cloudsCleared++;
+                player2.animate--;
+            }
+            #endregion
+
+            #region ErrorCount check
+            // Player 1 (left)
+            if (player1.errorCount > 0 & player1.errorCount % 2 == 0)
+            {
+                player1PictureLocation += 6;
+                player1.xLoc += 4;
+                player1.errorCount--;
+            }
+            else if (player1.errorCount > 0 & player1.errorCount % 2 != 0)
+            {
+                player1PictureLocation -= 6;
+                player1.xLoc -= 4;
+                player1.errorCount--;
+            }
+            else if (player1.errorCount <= 0)
+            {
+                player1.playerCloud = Properties.Resources.playerCloud;
+            }
+
+            // Player 2 (right)
+            if (player2.errorCount > 0 & player2.errorCount % 2 == 0 )
+            {
+                player2PictureLocation += 6;
+                player2.xLoc += 4;
+                player2.errorCount--;
+            }
+            else if (player2.errorCount > 0 & player2.errorCount % 2 != 0)
+            {
+                player2PictureLocation -= 6;
+                player2.xLoc -= 4;
+                player2.errorCount--;
+            }
+            else if (player2.errorCount <= 0)
+            {
+                player2.playerCloud = Properties.Resources.playerCloud;
+            }
+            #endregion
 
             Refresh();
         }
 
-        private void ColourCheck(Character p, int colour, List<Cloud> playerList)
+        private void GameScreen_KeyDown(object sender, KeyEventArgs e)
         {
-            if (p.cloudsCleared < 40)
-            {
-                if (colour == playerList[0].colour)
-                {
-                    p.cloudsCleared++;
-
-                    p.xLoc = playerList[0].xLoc + (50 * p.cloudsCleared);
-                    p.yLoc = playerList[0].yLoc + (50 * p.cloudsCleared);
-                    playerList.RemoveAt(0);
-
-                    Refresh();
-                }
-            }
-        }
-
-        private void GameScreen_KeyUp(object sender, KeyEventArgs e)
-        {
-
+            // PLAYER 1 LEFT
             switch (e.KeyCode)
             {
-                //PLAYER 2 RIGHT
-                case Keys.B:
-                    bDown = true;   //BLUE
-                    ColourCheck(player2, 3, p2Clouds);
-
-                    break;
-                case Keys.N:
-                    nDown = true;   //YELLOW
-                    ColourCheck(player2, 2, p2Clouds);
-
-                    break;
-                case Keys.M:
-                    mDown = true;   //RED
-                    ColourCheck(player2, 0, p2Clouds);
-
-                    break;
-                case Keys.Space:
-                    spaceDown = true;   //GREEN
-                    ColourCheck(player2, 1, p2Clouds);
-
-                    break;
-
-
-                // PLAYER 1 LEFT
+                // Player 1 (left)
                 case Keys.V:
                     vDown = true;
-                    ColourCheck(player1, 3, p1Clouds);
-
-                    break;
-                case Keys.C:
-                    cDown = true;
-                    ColourCheck(player1, 2, p1Clouds);
-
                     break;
                 case Keys.X:
                     xDown = true;
-                    ColourCheck(player1, 0, p1Clouds);
-
+                    break;
+                case Keys.C:
+                    cDown = true;
                     break;
                 case Keys.Z:
                     zDown = true;
-                    ColourCheck(player1, 1, p1Clouds);
-
                     break;
+
+                // Player 2 (right)
+                case Keys.B:
+                    bDown = true;
+                    break;
+                case Keys.N:
+                    nDown = true;
+                    break;
+                case Keys.M:
+                    mDown = true;
+                    break;
+                case Keys.Space:
+                    spaceDown = true;
+                    break;
+
                 default:
                     break;
             }
         }
 
-        private void GameScreen_KeyDown(object sender, KeyEventArgs e)
+        private void GameScreen_KeyUp(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
-                //PLAYER 2 RIGHT
+                // Player 1 (left)
+                case Keys.V:
+                    vDown = false;
+                    break;
+                case Keys.X:
+                    xDown = false;
+                    break;
+                case Keys.C:
+                    cDown = false;
+                    break;
+                case Keys.Z:
+                    zDown = false;
+                    break;
+
+                // Player 2 (right)
                 case Keys.B:
                     bDown = false;
                     break;
@@ -239,23 +446,47 @@ namespace Cake_Run
                     spaceDown = false;
                     break;
 
-                // PLAYER 1 LEFT
-                case Keys.V:
-                    vDown = false;
-                    break;
-                case Keys.C:
-                    cDown = false;
-                    break;
-                case Keys.X:
-                    xDown = false;
-                    break;
-                case Keys.Z:
-                    zDown = false;
-                    break;
-
                 default:
                     break;
             }
+        }
+
+        private void GameScreen_Paint(object sender, PaintEventArgs e)
+        {
+            // Background images
+            e.Graphics.DrawImage(Properties.Resources.Sky, 0, player1PictureLocation, 398, 1500);
+            e.Graphics.DrawImage(Properties.Resources.Sky, 398, player2PictureLocation, 398, 1500);
+
+            //MIDDLE LINE
+            e.Graphics.DrawLine(new Pen(Color.LightBlue, 12), 394, 0, 394, 750);
+            //MIDDLE RECTANGLE
+            e.Graphics.DrawRectangle(new Pen(Color.LightBlue, 8), 300, 260, 200, 280);
+            e.Graphics.FillRectangle(new SolidBrush(Color.LightYellow), 304, 264, 192, 272);
+
+            // PROGRESS LINE AND BAR
+            e.Graphics.DrawLine(new Pen(Color.Black, 4), 348, 312, 348, 512);
+            e.Graphics.DrawLine(new Pen(Color.Black, 4), 448, 312, 448, 512);
+            e.Graphics.DrawString("GOAL", new Font("Verdana", 24, FontStyle.Regular), new SolidBrush(Color.DarkOrange), 350, 270);
+
+            // TWO CIRCLES FOR PLAYER ONE AND PLAYER TWO
+            e.Graphics.FillEllipse(new SolidBrush(Color.LightBlue), 337, 500 - (player1.cloudsCleared * LINE_RATIO), 22, 22);
+            e.Graphics.FillEllipse(new SolidBrush(Color.LightGreen), 437, 500 - (player2.cloudsCleared * LINE_RATIO), 22, 22);
+
+            // Daw all clouds for player 1
+            foreach (var c in p1Clouds)
+            {
+                e.Graphics.DrawImage(c.cloudColour, c.xLoc, c.yLoc, c.xSize, c.ySize);
+            }
+
+            // Draw all clouds for player 2
+            foreach (var c in p2Clouds)
+            {
+                e.Graphics.DrawImage(c.cloudColour, c.xLoc, c.yLoc, c.xSize, c.ySize);
+            }
+
+            // Drawing the actual cloud of each player
+            e.Graphics.DrawImage(player1.playerCloud, player1.xLoc, player1.yLoc, player1.xSize, player1.ySize);
+            e.Graphics.DrawImage(player2.playerCloud, player2.xLoc, player2.yLoc, player2.xSize, player2.ySize);
         }
     }
 }

@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationManifest>Misc\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Character.cs" />
-    <Compile Include="Cloud.cs" />
+    <Compile Include="Classes\Cloud.cs" />
     <Compile Include="Screens\GameScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -81,7 +81,7 @@
     <EmbeddedResource Include="Screens\InstructionScreen.resx">
       <DependentUpon>InstructionScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.manifest" />
+    <None Include="Misc\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,9 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Misc\App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\BKGInstructionScreen.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\InstructionScreen.jpg" />
@@ -118,6 +115,41 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\yellowCloud.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bensound-funnysong.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blackCloud.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blueCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\greenCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellowCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blackCloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\playerCloud.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

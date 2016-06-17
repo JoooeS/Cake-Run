@@ -36,21 +36,19 @@ namespace Cake_Run
 
             indicator1.Region = new Region(circlePath);
             indicator2.Region = new Region(circlePath);
-            indicator3.Region = new Region(circlePath);
-            indicator4.Region = new Region(circlePath);
         }
 
         private void InstructionScreen_KeyUp(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
-                case Keys.X:
+                case Keys.Z:
                     playersCurrentlyReady++;
                     indicator1.BackColor = Color.Green;
                     Refresh();
                     Check();
                     break;
-                case Keys.M:
+                case Keys.Space:
                     playersCurrentlyReady++;
                     indicator2.BackColor = Color.Green;
                     Refresh();
