@@ -394,9 +394,9 @@ namespace Cake_Run
                 {
                     yayplayer.controls.play();
                     endOfGame = true;
-                    endOfGameTime = 24;
+                    endOfGameTime = 83;
                 }
-                else if (endOfGameTime > 11)
+                else if (endOfGameTime > 43)
                 {
                     endOfGameTime--;
                 }
@@ -404,17 +404,24 @@ namespace Cake_Run
                 {
                     gameTick.Enabled = false;
                     gameTick.Stop();
-                    return;
+                    Form f = this.FindForm();
+                    GameOverScreen gos = new GameOverScreen();
+                    this.BringToFront();
+                    this.Controls.Add(gos);
+                    gos.BringToFront();
+                    //return;
                 }
                 else if (endOfGameTime > 0 & player1.cloudsCleared == numberOfClouds)
                 {
                     winX -= 3;
                     loseX += 3;
+                    endOfGameTime--;
                 }
                 else if (endOfGameTime > 0 & player2.cloudsCleared == numberOfClouds)
                 {
                     winX += 3;
                     loseX -= 3;
+                    endOfGameTime--;
                 }
             }
             
