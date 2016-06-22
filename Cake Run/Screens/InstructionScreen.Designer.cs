@@ -63,6 +63,7 @@
             this.Controls.Add(this.indicator1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "InstructionScreen";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.InstructionScreen_KeyUp);
             this.ResumeLayout(false);
 

@@ -34,7 +34,7 @@
             // 
             // gameTick
             // 
-            this.gameTick.Interval = 40;
+            this.gameTick.Interval = 36;
             this.gameTick.Tick += new System.EventHandler(this.gameTick_Tick);
             // 
             // GameScreen
