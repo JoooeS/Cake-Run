@@ -16,10 +16,11 @@ namespace Cake_Run
     public partial class GameScreen : UserControl
     {
         #region Variables
-        int LINE_RATIO = 3;
-        int numberOfClouds = 67;
+        //Values related to imaging and graphics
+        int lineRatio = 3;
         int CLOUD_Y_SIZE = 30;
         int CLOUD_X_SIZE = 40;
+        int numberOfClouds = 67;
         int player1PictureLocation = -750;
         int player2PictureLocation = -750;
         int animateTime = 4;
@@ -30,29 +31,36 @@ namespace Cake_Run
         public static string winner;
         public static Stopwatch playerTime;
 
+        //Random number generator for colour pattern creation
         Random numberGen = new Random();
 
+        //Booleans to send values for when a button has been pressed
         bool bDown, nDown, mDown, spaceDown, zDown, xDown, cDown, vDown;
         bool endOfGame = false;
 
+        //Clouds
         Image[] cloudColours = new Image[4];
+
+        //Lists
         List<int> colourPattern = new List<int>();
         List<Cloud> p1Clouds = new List<Cloud>();
         List<Cloud> p2Clouds = new List<Cloud>();        
 
+        //Player classes
         Character player1;
         Character player2;
 
+        //MP3 Players
         WindowsMediaPlayer songPlayer = new WindowsMediaPlayer();
-
+        WindowsMediaPlayer yayplayer = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer2 = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer3 = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer4 = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer5 = new WindowsMediaPlayer();
         WindowsMediaPlayer jumpPlayer6 = new WindowsMediaPlayer();
-        WindowsMediaPlayer yayplayer = new WindowsMediaPlayer();
-
+        
+        //To allow for multiple "jumpplayer"s to be played over top one another
         Boolean jumpPlayerPlaying = false;
         Boolean jumpPlayerPlaying2 = false;
         Boolean jumpPlayerPlaying3 = false;
@@ -64,7 +72,6 @@ namespace Cake_Run
         public GameScreen()
         {
             InitializeComponent();
-            //ArcadeUtilities.InUseCheck();
         }
 
         private void GameScreen_Load(object sender, EventArgs e)
@@ -90,13 +97,13 @@ namespace Cake_Run
             songPlayer.controls.play();
             #endregion
 
-            // Clouds Array
+            //Array of Cloud Images
             cloudColours[0] = Properties.Resources.redCloud;
             cloudColours[1] = Properties.Resources.greenCloud;
             cloudColours[2] = Properties.Resources.yellowCloud;
             cloudColours[3] = Properties.Resources.blueCloud;
 
-            //Create colour pattern which will be the same for both characters for fairness
+            //Create ONE coloured pattern to be used by both players
             for (int i = 0; i < numberOfClouds; i++)
             {
                 int x = numberGen.Next(0, 4);
@@ -117,13 +124,16 @@ namespace Cake_Run
                 p2Clouds.Add(c);
             }
 
-            // Creating player clouds
+            //Creating player clouds
             player1 = new Character(numberGen.Next(10, 250), p1Clouds[0].yLoc + 50, 40, 30, 0, 0, 0, 0, Properties.Resources.playerCloud);
             player2 = new Character(numberGen.Next(510, 750), p2Clouds[0].yLoc + 50, 40, 30, 0, 0, 0, 0, Properties.Resources.playerCloud);
-
-            gameTick.Enabled = true;
+                        
+            //Timer to record the winning time
             playerTime = new Stopwatch();
             playerTime.Start();
+
+            //Start the tick method
+            gameTick.Enabled = true;
         }
 
         private void gameTick_Tick(object sender, EventArgs e)
@@ -443,7 +453,6 @@ namespace Cake_Run
 
         private void GameScreen_KeyDown(object sender, KeyEventArgs e)
         {
-            // PLAYER 1 LEFT
             switch (e.KeyCode)
             {
                 // Player 1 (left)
@@ -483,7 +492,7 @@ namespace Cake_Run
         {
             switch (e.KeyCode)
             {
-                // Player 1 (left)
+                // Player 2 - right
                 case Keys.V:
                     vDown = false;
                     break;
@@ -497,7 +506,7 @@ namespace Cake_Run
                     zDown = false;
                     break;
 
-                // Player 2 (right)
+                // Player 1 - left
                 case Keys.B:
                     bDown = false;
                     break;
@@ -510,11 +519,11 @@ namespace Cake_Run
                 case Keys.Space:
                     spaceDown = false;
                     break;
+
                 case Keys.Escape:
                     PauseScreen a = new PauseScreen();
                     a.Show();
                     break;
-
                 default:
                     break;
             }
@@ -522,7 +531,7 @@ namespace Cake_Run
 
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
-            // Background images
+            //Background images
             e.Graphics.DrawImage(Properties.Resources.Sky, 0, player1PictureLocation, 398, 1500);
             e.Graphics.DrawImage(Properties.Resources.Sky, 398, player2PictureLocation, 402, 1500);
 
@@ -532,32 +541,32 @@ namespace Cake_Run
             e.Graphics.DrawRectangle(new Pen(Color.LightBlue, 8), 300, 260, 200, 280);
             e.Graphics.FillRectangle(new SolidBrush(Color.LightYellow), 304, 264, 192, 272);
 
-            // PROGRESS LINE AND BAR
+            //PROGRESS LINE AND BAR
             e.Graphics.DrawLine(new Pen(Color.Black, 4), 348, 312, 348, 512);
             e.Graphics.DrawLine(new Pen(Color.Black, 4), 448, 312, 448, 512);
             e.Graphics.DrawString("GOAL", new Font("Verdana", 24, FontStyle.Regular), new SolidBrush(Color.DarkOrange), 350, 270);
 
-            // TWO CIRCLES FOR PLAYER ONE AND PLAYER TWO
-            e.Graphics.FillEllipse(new SolidBrush(Color.LightBlue), 337, 500 - (player1.cloudsCleared * LINE_RATIO), 22, 22);
-            e.Graphics.FillEllipse(new SolidBrush(Color.LightGreen), 437, 500 - (player2.cloudsCleared * LINE_RATIO), 22, 22);
+            //TWO CIRCLES FOR PLAYER ONE AND PLAYER TWO
+            e.Graphics.FillEllipse(new SolidBrush(Color.LightBlue), 337, 500 - (player1.cloudsCleared * lineRatio), 22, 22);
+            e.Graphics.FillEllipse(new SolidBrush(Color.LightGreen), 437, 500 - (player2.cloudsCleared * lineRatio), 22, 22);
 
-            // Daw all clouds for player 1
+            //Daw all clouds for player 1
             foreach (var c in p1Clouds)
             {
                 e.Graphics.DrawImage(c.cloudColour, c.xLoc, c.yLoc, c.xSize, c.ySize);
             }
 
-            // Draw all clouds for player 2
+            //Draw all clouds for player 2
             foreach (var c in p2Clouds)
             {
                 e.Graphics.DrawImage(c.cloudColour, c.xLoc, c.yLoc, c.xSize, c.ySize);
             }
 
-            // Drawing the actual cloud of each player
+            //Drawing the actual cloud of each player
             e.Graphics.DrawImage(player1.playerCloud, player1.xLoc, player1.yLoc, player1.xSize, player1.ySize);
             e.Graphics.DrawImage(player2.playerCloud, player2.xLoc, player2.yLoc, player2.xSize, player2.ySize);
 
-            // Win
+            //Win
             if (endOfGame)
             {
                 e.Graphics.DrawImage(Properties.Resources.win, winX, 150, 400, 200);

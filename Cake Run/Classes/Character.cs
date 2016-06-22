@@ -14,7 +14,7 @@ namespace Cake_Run
         public Image playerCloud;
 
         /// <summary>
-        /// Constructor Method for Character cloud
+        /// Constructor Method for player cloud
         /// </summary>
         /// <param name="_xLoc">X Location</param>
         /// <param name="_yLoc">Y Location</param>

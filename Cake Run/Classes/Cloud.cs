@@ -13,7 +13,7 @@ namespace Cake_Run
         public Image cloudColour;
 
         /// <summary>
-        /// Constructor Method for Clouds
+        /// Constructor Method for target clouds
         /// </summary>
         /// <param name="_colour">R,G,B, or Y</param>
         /// <param name="_xLoc">X Location</param>

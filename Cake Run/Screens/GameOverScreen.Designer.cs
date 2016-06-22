@@ -152,7 +152,6 @@
             this.Size = new System.Drawing.Size(800, 750);
             this.Load += new System.EventHandler(this.GameOverScreen_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameOverScreen_Paint);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameOverScreen_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameOverScreen_KeyUp);
             this.ResumeLayout(false);
 

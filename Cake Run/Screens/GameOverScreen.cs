@@ -40,6 +40,51 @@ namespace Cake_Run
             }
         }
 
+        /// <summary>
+        /// Opens highscore XML and reads highscore
+        /// </summary>
+        private void Read()
+        {
+            XmlTextReader reader = new XmlTextReader("highscore.xml");
+
+            labelFastTime.Text = "";
+
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Text)
+                {
+                   labelFastTime.Text = reader.Value;
+                }
+            }
+            Refresh();
+            Thread.Sleep(2000);
+
+            reader.Close();
+        }
+        
+        /// <summary>
+        /// Checks wheter a new highscore has been made and saves the fastest time as the highscore
+        /// </summary>
+        private void Write()
+        {
+            XmlTextWriter writer = new XmlTextWriter("highscore.xml", null);
+
+            writer.WriteStartElement("highscore");
+
+            if (Convert.ToInt32(labelWinnerTime.Text) < Convert.ToInt32(labelFastTime.Text))
+            {
+                writer.WriteElementString("score", Convert.ToString(labelWinnerTime.Text));
+            }
+            else
+            {
+                writer.WriteElementString("score", Convert.ToString(labelFastTime.Text));
+            }            
+
+            writer.WriteEndElement();
+
+            writer.Close();
+        }
+
         private void GameOverScreen_KeyUp(object sender, KeyEventArgs e)
         {
             Form f = this.FindForm();
@@ -65,68 +110,6 @@ namespace Cake_Run
                 case Keys.Escape:
                     PauseScreen a = new PauseScreen();
                     a.Show();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Opens highscore XML and reads highscore
-        /// </summary>
-        private void Read()
-        {
-            XmlTextReader reader = new XmlTextReader("highscore.xml");
-
-            labelFastTime.Text = "";
-
-            while (reader.Read())
-            {
-                if (reader.NodeType == XmlNodeType.Text)
-                {
-                   labelFastTime.Text = reader.Value;
-                }
-            }
-            Refresh();
-            Thread.Sleep(2000);
-
-            reader.Close();
-        }
-        
-        /// <summary>
-        /// Saves highscore
-        /// </summary>
-        private void Write()
-        {
-            XmlTextWriter writer = new XmlTextWriter("highscore.xml", null);
-
-            writer.WriteStartElement("highscore");
-
-            if (Convert.ToInt32(labelWinnerTime.Text) < Convert.ToInt32(labelFastTime.Text))
-            {
-                writer.WriteElementString("score", Convert.ToString(labelWinnerTime.Text));
-            }
-            else
-            {
-                writer.WriteElementString("score", Convert.ToString(labelFastTime.Text));
-            }            
-
-            writer.WriteEndElement();
-
-            writer.Close();
-        }
-
-        private void GameOverScreen_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.V: // Blue
-                    break;
-                case Keys.B: // Blue
-                    break;
-                case Keys.X: // Red
-                    break;
-                case Keys.M: // Red
                     break;
                 default:
                     break;
