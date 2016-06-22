@@ -18,8 +18,8 @@ namespace Cake_Run
         #region Variables
         //Values related to imaging and graphics
         int lineRatio = 3;
-        int CLOUD_Y_SIZE = 30;
-        int CLOUD_X_SIZE = 40;
+        int cloudsYSize = 30;
+        int cloudsXSize = 40;
         int numberOfClouds = 67;
         int player1PictureLocation = -750;
         int player2PictureLocation = -750;
@@ -113,14 +113,14 @@ namespace Cake_Run
             //Player 1 clouds
             for (int i = 0; i < numberOfClouds; i++)
             {
-                Cloud c = new Cloud(colourPattern[i], numberGen.Next(10, 250), 550 - (40 * i), CLOUD_X_SIZE, CLOUD_Y_SIZE, cloudColours[colourPattern[i]]);
+                Cloud c = new Cloud(colourPattern[i], numberGen.Next(10, 250), 550 - (40 * i), cloudsXSize, cloudsYSize, cloudColours[colourPattern[i]]);
                 p1Clouds.Add(c);
             }
 
             //Player 2 clouds
             for (int i = 0; i < numberOfClouds; i++)
             {
-                Cloud c = new Cloud(colourPattern[i], numberGen.Next(510, 750), 550 - (40 * i), CLOUD_X_SIZE, CLOUD_Y_SIZE, cloudColours[colourPattern[i]]);
+                Cloud c = new Cloud(colourPattern[i], numberGen.Next(510, 750), 550 - (40 * i), cloudsXSize, cloudsYSize, cloudColours[colourPattern[i]]);
                 p2Clouds.Add(c);
             }
 
